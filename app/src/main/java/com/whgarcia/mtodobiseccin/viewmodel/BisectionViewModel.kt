@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.whgarcia.mtodobiseccin.model.BisecctionModel
 import com.whgarcia.mtodobiseccin.utils.PolinomioEvaluator
+import java.util.Locale
 
 class BisectionViewModel : ViewModel() {
     var state by mutableStateOf(BisecctionModel())
@@ -64,7 +65,8 @@ class BisectionViewModel : ViewModel() {
             }
 
             // Guardar el resultado en el estado
-            state = state.copy(bisectioResult = x)
+            val xStr = String.format(Locale.US, "%.${state.precision.toInt()}f", x)
+            state = state.copy(bisectioResult = xStr.toDouble())
 
         } catch (e: Exception) {
             // Manejar errores de formato o cálculo

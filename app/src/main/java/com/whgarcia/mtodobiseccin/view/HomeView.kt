@@ -38,56 +38,27 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetContent = {
-            Column(modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
             ) {
-                Row(modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly) {
-                    TextWithSize(
-                        "Function: ",
-                        size = 16.sp,
-                        modifier = Modifier
-                            .padding(start = 30.dp)
-                            .weight(1f)
-                    )
-                    SpaceW()
-                    TextWithSize(
-                        state.function,
-                        size = 20.sp,
-                        modifier = Modifier
-                            .padding(end = 30.dp)
-                            .weight(2f),
-                        FontWeight.Bold
-                    )
-                }
-
+                TextWithSize(
+                    "Result of bisection: ",
+                    size = 16.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp)
+                )
                 SpaceH()
-
-                // Mostrar la secuencia
-
-                SpaceH()
-
-                Row(modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly) {
-                    TextWithSize(
-                        "X = ",
-                        size = 16.sp,
-                        modifier = Modifier
-                            .padding(start = 30.dp)
-                            .weight(1f)
-                    )
-                    SpaceW()
-                    TextWithSize(
-                        state.bisectioResult.toString(),
-                        size = 20.sp,
-                        modifier = Modifier
-                            .padding(end = 30.dp)
-                            .weight(3f),
-                        FontWeight.Bold
-                    )
-                }
+                TextWithSize(
+                    state.bisectioResult.toString(),
+                    size = 20.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp),
+                    FontWeight.Bold
+                )
+                SpaceH(20.dp)
             }
         },
         sheetPeekHeight = 0.dp // Inicialmente el BottomSheet no se ve
