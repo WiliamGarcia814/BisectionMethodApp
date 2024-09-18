@@ -7,17 +7,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.whgarcia.mtodobiseccin.component.AlertDialogComponent
 import com.whgarcia.mtodobiseccin.component.OutlineNumberField
 import com.whgarcia.mtodobiseccin.component.OutlineTextField
 import com.whgarcia.mtodobiseccin.component.RadioButtonComponent
@@ -26,113 +22,130 @@ import com.whgarcia.mtodobiseccin.component.SpaceH
 import com.whgarcia.mtodobiseccin.component.SpaceW
 import com.whgarcia.mtodobiseccin.component.TextWithSize
 import com.whgarcia.mtodobiseccin.viewmodel.BisectionViewModel
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel){
-    val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberBottomSheetScaffoldState()
-    val state = viewModel.state
+    Column(
+        modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val state = viewModel.state
 
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState,
-        sheetContent = {
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-            ) {
-                TextWithSize(
-                    "Result of bisection: ",
-                    size = 16.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 30.dp)
-                )
-                SpaceH()
-                TextWithSize(
-                    state.bisectioResult.toString(),
-                    size = 20.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 30.dp),
-                    FontWeight.Bold
-                )
-                SpaceH(20.dp)
-            }
-        },
-        sheetPeekHeight = 0.dp // Inicialmente el BottomSheet no se ve
-    ){
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+        OutlineTextField(
+            value = state.function,
+            onValueChange = { viewModel.onValue(it, "function") },
+            label = "Function"
+        )
+
+        SpaceH()
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-
-            OutlineTextField(value = state.function, onValueChange = { viewModel.onValue(it, "function") }, label = "Function")
-
-            SpaceH()
-
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                OutlineNumberField(value = state.x0, onValueChange = {viewModel.onValue(it, "x0")}, label = "Initial value x0", modifier = Modifier
-                    .padding(start = 30.dp)
-                    .weight(1f))
-                SpaceW()
-                OutlineNumberField(value = state.x1, onValueChange = {viewModel.onValue(it, "x1")}, label = "Initial value x1", modifier = Modifier
-                    .padding(end = 30.dp)
-                    .weight(1f))
-            }
-
-            SpaceH()
-
-            OutlineNumberField(value = state.tolerance, onValueChange = {viewModel.onValue(it, "tolerance")}, label = "Desired tolerance", modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 30.dp))
-
-            SpaceH(10.dp)
-
-            TextWithSize(label = "Tolerance type", size = 12.sp, modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 30.dp))
-            RadioButtonComponent(selectedOption = state.type_tolerance, onOptionSelected = { viewModel.onValue(it.toString(), "type_tolerance") })
-
-            SpaceH()
-
-            TextWithSize(label = "Calculation precision", size = 12.sp, modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 30.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TextWithSize(label = "Digits after the decimal ponit: ", size = 14.sp, modifier = Modifier
-                    .padding(start = 30.dp)
-                    .weight(3f))
-                SpaceW()
-                TextWithSize(label = state.precision, size = 14.sp, modifier = Modifier
-                    .padding(end = 30.dp)
-                    .weight(1f))
-            }
-
-            SpaceH()
-
-            Slider(value = state.precision.toFloat(),
-                onValueChange = { viewModel.onValue(it.toInt().toString(), "precision") },
-                valueRange = 0f..20f,
+            OutlineNumberField(
+                value = state.x0,
+                onValueChange = {viewModel.onValue(it, "x0")},
+                label = "Initial value x0",
                 modifier = Modifier
-                    .padding(horizontal = 30.dp)
-                    .fillMaxWidth()
+                    .padding(start = 30.dp)
+                    .weight(1f)
+            )
+            SpaceW()
+            OutlineNumberField(
+                value = state.x1,
+                onValueChange = {viewModel.onValue(it, "x1")},
+                label = "Initial value x1",
+                modifier = Modifier
+                    .padding(end = 30.dp)
+                    .weight(1f)
+            )
+        }
+
+        SpaceH()
+
+        OutlineNumberField(
+            value = state.tolerance,
+            onValueChange = {viewModel.onValue(it, "tolerance")},
+            label = "Desired tolerance",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp)
+        )
+
+        SpaceH(10.dp)
+
+        TextWithSize(
+            label = "Tolerance type",
+            size = 12.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp)
+        )
+
+        RadioButtonComponent(
+            selectedOption = state.type_tolerance,
+            onOptionSelected = { viewModel.onValue(it.toString(), "type_tolerance") }
+        )
+
+        SpaceH()
+
+        TextWithSize(
+            label = "Calculation precision",
+            size = 12.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TextWithSize(
+                label = "Digits after the decimal ponit: ",
+                size = 14.sp,
+                modifier = Modifier
+                    .padding(start = 30.dp)
+                    .weight(3f)
             )
 
-            SpaceH(20.dp)
+            SpaceW()
 
-            SimpleButton(text = "CALCULATE") {
-                viewModel.calculateBisection()
-                coroutineScope.launch {
-                    scaffoldState.bottomSheetState.expand()
-                }
+            TextWithSize(
+                label = state.precision,
+                size = 14.sp,
+                modifier = Modifier
+                    .padding(end = 30.dp)
+                    .weight(1f)
+            )
+        }
+
+        SpaceH()
+
+        Slider(
+            value = state.precision.toFloat(),
+            onValueChange = { viewModel.onValue(it.toInt().toString(), "precision") },
+            valueRange = 0f..20f,
+            modifier = Modifier
+                .padding(horizontal = 30.dp)
+                .fillMaxWidth()
+        )
+
+        SpaceH(20.dp)
+
+        SimpleButton(
+            text = "CALCULATE"
+        ) {
+            viewModel.onCalculate()
+        }
+
+        if (state.showAlert){
+            AlertDialogComponent(
+                title = "Notification",
+                message = state.alertMessage,
+                confirmText = "Ok",
+                onConfirmClick = { viewModel.dismissAlert() }) {
             }
         }
     }

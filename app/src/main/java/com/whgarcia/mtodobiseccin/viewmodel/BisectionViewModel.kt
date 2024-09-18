@@ -24,22 +24,63 @@ class BisectionViewModel : ViewModel() {
         }
     }
 
-    fun calculateBisection(){
+    fun onCalculate(){
+        val function = state.function
+        val x0 = state.x0.toDoubleOrNull()
+        val x1 = state.x1.toDoubleOrNull()
+        val tolerance = state.tolerance.toDoubleOrNull()
+
+        if (function.isEmpty()){
+            state = state.copy(showAlert = true, alertMessage = "Function value isn´t empty")
+            return
+        }else if(isFunction(function)){
+            state = state.copy(showAlert = true, alertMessage = "Invalid function value")
+            return
+        }
+
+        if (x0 == null) {
+            state = state.copy(showAlert = true, alertMessage = "Invalid x0 value")
+            return
+        }
+
+        if (x1 == null) {
+            state = state.copy(showAlert = true, alertMessage = "Invalid x1 value")
+            return
+        }
+
+        if (tolerance == null) {
+            state = state.copy(showAlert = true, alertMessage = "Tolerance value is empty")
+            return
+        }else if (tolerance <= 0) {
+            state = state.copy(showAlert = true, alertMessage = "Invalid tolerance value")
+            return
+        }
+
+        if (evaluateFunction(function, x0, x1)){
+            performCalculation(function, x0, x1, tolerance, state.type_tolerance, state.precision.toInt())
+        }else{
+            state = state.copy(showAlert = true, alertMessage = "There is no root between the interval of X0 and X1")
+            return
+        }
+    }
+
+
+    private fun performCalculation(function: String, x0: Double, x1: Double, tolerance: Double, type_tolerance: Int, precicion: Int){
         try {
             // Crear una instancia de la clase para EvaluarExpresion
             val polinomioEvaluator = PolinomioEvaluator()
 
-            var x0 = state.x0.toDouble()
-            var x1 = state.x1.toDouble()
+            var x0 = x0
+            var x1 = x1
             var x = (x0 + x1) / 2
-            var fx = polinomioEvaluator.evaluarPolinomio(state.function, x)
+            var fx = polinomioEvaluator.evaluarPolinomio(function, x)
 
             // Iterar para realizar el método de bisección
-            while (Math.abs(fx) > state.tolerance.toDouble()) {
+            while (Math.abs(fx) > tolerance) {
                 val xAnterior = x
 
                 // Actualizar los extremos del intervalo
-                if (fx * polinomioEvaluator.evaluarPolinomio(state.function, x0) < 0) {
+                if (fx * polinomioEvaluator.evaluarPolinomio(function, x0) < 0) {
                     x1 = x
                 } else {
                     x0 = x
@@ -47,25 +88,25 @@ class BisectionViewModel : ViewModel() {
 
                 // Calcular el nuevo valor de x
                 x = (x0 + x1) / 2
-                fx = polinomioEvaluator.evaluarPolinomio(state.function, x)
+                fx = polinomioEvaluator.evaluarPolinomio(function, x)
 
                 // Verificar la convergencia del punto final
-                if (state.type_tolerance == 0 &&
-                    convergenciaPuntoFinal(x, xAnterior, state.tolerance.toDouble())
+                if (type_tolerance == 0 &&
+                    convergenciaPuntoFinal(x, xAnterior, tolerance)
                 ) {
                     break
                 }
 
                 // Verificar la convergencia de la función
-                if (state.type_tolerance == 1 &&
-                    convergenciaFuncion(fx, state.tolerance.toDouble())
+                if (type_tolerance == 1 &&
+                    convergenciaFuncion(fx, tolerance)
                 ) {
                     break
                 }
             }
 
             // Guardar el resultado en el estado
-            val xStr = String.format(Locale.US, "%.${state.precision.toInt()}f", x)
+            val xStr = String.format(Locale.US, "%.${precicion}f", x)
             state = state.copy(bisectioResult = xStr.toDouble())
 
         } catch (e: Exception) {
@@ -82,5 +123,28 @@ class BisectionViewModel : ViewModel() {
     // Método para verificar la convergencia de la función
     private fun convergenciaFuncion(fx: Double, tolerancia: Double): Boolean {
         return Math.abs(fx) < tolerancia
+    }
+
+    // Método para validar si la función se puede evaluar
+    private fun isFunction(function: String): Boolean{
+        try {
+            val polinomioEvaluator = PolinomioEvaluator()
+            polinomioEvaluator.evaluarPolinomio(function, 0.0)
+            return false
+        }catch (e: Exception){
+            return true
+        }
+    }
+
+    // Método para evaluar si el producto de x0 y x1 es menor que 0, para saber si existe una raiz en ese intervalo
+    private fun evaluateFunction(function: String, x0: Double, x1: Double): Boolean{
+        val polinomioEvaluator = PolinomioEvaluator()
+        val eva_x0 = polinomioEvaluator.evaluarPolinomio(function, x0)
+        val eva_x1 = polinomioEvaluator.evaluarPolinomio(function, x1)
+        return if (eva_x0 * eva_x1 < 0) true else false
+    }
+
+    fun dismissAlert() {
+        state = state.copy(showAlert = false)
     }
 }

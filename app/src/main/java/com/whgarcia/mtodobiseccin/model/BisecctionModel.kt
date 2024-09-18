@@ -7,5 +7,7 @@ data class BisecctionModel(
     val tolerance : String = "0.0001",
     val type_tolerance : Int = 0,
     val precision: String = "4",
-    val bisectioResult: Double = 0.0
+    val bisectioResult: Double = 0.0,
+    val showAlert: Boolean = false,
+    val alertMessage: String = ""
 )
