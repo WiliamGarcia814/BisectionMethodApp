@@ -5,13 +5,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.whgarcia.mtodobiseccin.model.BisecctionModel
+import com.whgarcia.mtodobiseccin.model.BisectionModel
 import com.whgarcia.mtodobiseccin.utils.PolinomioEvaluator
 import java.util.Locale
 
 class BisectionViewModel : ViewModel() {
-    var state by mutableStateOf(BisecctionModel())
+    var state by mutableStateOf(BisectionModel())
         private set
+
+    var showBottomSheet by mutableStateOf(false)
+        private set
+
+    fun showBottomSheet(show: Boolean){
+        showBottomSheet = show
+    }
 
     fun onValue(value: String, text: String){
         when(text){
@@ -24,6 +31,7 @@ class BisectionViewModel : ViewModel() {
         }
     }
 
+    // Método para realizar las validaciones de las entradas
     fun onCalculate(){
         val function = state.function
         val x0 = state.x0.toDoubleOrNull()
@@ -64,7 +72,7 @@ class BisectionViewModel : ViewModel() {
         }
     }
 
-
+    // Método para calcular el resultado de la bisección
     private fun performCalculation(function: String, _x0: Double, _x1: Double, tolerance: Double, type_tolerance: Int, precicion: Int){
         try {
             // Crear una instancia de la clase para EvaluarExpresion
@@ -108,7 +116,7 @@ class BisectionViewModel : ViewModel() {
             // Guardar el resultado en el estado
             val xStr = String.format(Locale.US, "%.${precicion}f", x)
             state = state.copy(bisectioResult = xStr.toDouble())
-
+            showBottomSheet(true)
         } catch (e: Exception) {
             // Manejar errores de formato o cálculo
             Log.e("BisectionViewModel",e.message.toString())
@@ -144,6 +152,7 @@ class BisectionViewModel : ViewModel() {
         return if (eva_x0 * eva_x1 < 0) true else false
     }
 
+    // Método para cerrar la alerta
     fun dismissAlert() {
         state = state.copy(showAlert = false)
     }
