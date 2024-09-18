@@ -38,6 +38,7 @@ class BisectionViewModel : ViewModel() {
         val x1 = state.x1.toDoubleOrNull()
         val tolerance = state.tolerance.toDoubleOrNull()
 
+        // Validar si el valor de la función esta vacío y que tenga el formato de una función
         if (function.isEmpty()){
             state = state.copy(showAlert = true, alertMessage = "Function value isn´t empty")
             return
@@ -46,24 +47,28 @@ class BisectionViewModel : ViewModel() {
             return
         }
 
+        // Validar que el valor de x0 no sea nulo
         if (x0 == null) {
             state = state.copy(showAlert = true, alertMessage = "Invalid x0 value")
             return
         }
 
+        // Validar que el valor de x1 no sea nulo
         if (x1 == null) {
             state = state.copy(showAlert = true, alertMessage = "Invalid x1 value")
             return
         }
 
+        // Validar que el valor de la tolerancia no sea nulo
         if (tolerance == null) {
             state = state.copy(showAlert = true, alertMessage = "Tolerance value is empty")
             return
-        }else if (tolerance <= 0) {
+        }else if (tolerance <= 0) { // Validar que la tolerancia sea negativa
             state = state.copy(showAlert = true, alertMessage = "Invalid tolerance value")
             return
         }
 
+        // Validar que exista una raiz en el intervalo de x0 y x1
         if (evaluateFunction(function, x0, x1)){
             performCalculation(function, x0, x1, tolerance, state.type_tolerance, state.precision.toInt())
         }else{
@@ -116,7 +121,7 @@ class BisectionViewModel : ViewModel() {
             // Guardar el resultado en el estado
             val xStr = String.format(Locale.US, "%.${precicion}f", x)
             state = state.copy(bisectioResult = xStr.toDouble())
-            showBottomSheet(true)
+            showBottomSheet(true) // Mostrar el bottom sheet con el resultado
         } catch (e: Exception) {
             // Manejar errores de formato o cálculo
             Log.e("BisectionViewModel",e.message.toString())

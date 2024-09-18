@@ -31,16 +31,21 @@ import com.whgarcia.mtodobiseccin.viewmodel.BisectionViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel){
+    // Obtener el estado del ViewModel para determinar si se debe mostrar el bottom sheet
     val showBottomSheet = viewModel.showBottomSheet
+    // Crear y recordar el estado del bottom sheet
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    // Columna que organiza los elementos verticalmente
     Column(
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Obtener el estado actual del ViewModel
         val state = viewModel.state
 
+        // Campo de texto para la funció
         OutlineTextField(
             value = state.function,
             onValueChange = { viewModel.onValue(it, "function") },
@@ -49,10 +54,12 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
 
         SpaceH()
 
+        // Fila que contiene dos campos numéricos (x0 y x1)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
+            // Primer campo numérico para el valor inicial x0
             OutlineNumberField(
                 value = state.x0,
                 onValueChange = {viewModel.onValue(it, "x0")},
@@ -61,7 +68,10 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
                     .padding(start = 30.dp)
                     .weight(1f)
             )
+
             SpaceW()
+
+            // Segundo campo numérico para el valor inicial x1
             OutlineNumberField(
                 value = state.x1,
                 onValueChange = {viewModel.onValue(it, "x1")},
@@ -74,6 +84,7 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
 
         SpaceH()
 
+        // Campo numérico para la tolerancia deseada
         OutlineNumberField(
             value = state.tolerance,
             onValueChange = {viewModel.onValue(it, "tolerance")},
@@ -85,6 +96,7 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
 
         SpaceH(10.dp)
 
+        // Texto para el tipo de tolerancia
         TextWithSize(
             label = "Tolerance type",
             size = 12.sp,
@@ -93,6 +105,7 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
                 .padding(horizontal = 30.dp)
         )
 
+        // Componente para los botones de radio para seleccionar el tipo de tolerancia
         RadioButtonComponent(
             selectedOption = state.type_tolerance,
             onOptionSelected = { viewModel.onValue(it.toString(), "type_tolerance") }
@@ -100,6 +113,7 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
 
         SpaceH()
 
+        // Texto para la precisión del cálculo
         TextWithSize(
             label = "Calculation precision",
             size = 12.sp,
@@ -110,6 +124,7 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
+            // Texto para la cantidad de dígitos después del punto decimal
             TextWithSize(
                 label = "Digits after the decimal ponit: ",
                 size = 14.sp,
@@ -120,6 +135,7 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
 
             SpaceW()
 
+            // Texto que muestra la precisión actual
             TextWithSize(
                 label = state.precision,
                 size = 14.sp,
@@ -131,6 +147,7 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
 
         SpaceH()
 
+        // Deslizador para ajustar la precisión
         Slider(
             value = state.precision.toFloat(),
             onValueChange = { viewModel.onValue(it.toInt().toString(), "precision") },
@@ -142,12 +159,14 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
 
         SpaceH(20.dp)
 
+        // Botón para calcular
         SimpleButton(
             text = "CALCULATE"
         ) {
-            viewModel.onCalculate()
+            viewModel.onCalculate() // Acción al hacer clic en el botón
         }
 
+        // Mostrar el bottom sheet si es necesario
         if (showBottomSheet){
             ModalBottomSheet(
                 modifier = Modifier.fillMaxHeight(),
@@ -174,6 +193,7 @@ fun ContentHomeView(paddingValues: PaddingValues, viewModel: BisectionViewModel)
             }
         }
 
+        // Mostrar un diálogo de alerta si es necesario
         if (state.showAlert){
             AlertDialogComponent(
                 title = "Notification",

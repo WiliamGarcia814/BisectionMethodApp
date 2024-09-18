@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+// Función composable que representa un botón con contorno
 @Composable
 fun SimpleButton(text: String, color: Color = MaterialTheme.colorScheme.primary, onClick: () -> Unit){
     OutlinedButton(
@@ -33,6 +34,7 @@ fun SimpleButton(text: String, color: Color = MaterialTheme.colorScheme.primary,
     }
 }
 
+//Función composable que representa un grupo de botones de radio
 @Composable
 fun RadioButtonComponent(selectedOption: Int, onOptionSelected: (Int) -> Unit) {
     // Mapa que asocia las opciones de texto con valores numéricos

@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
+// Función composable que representa una entrada de valores de texto
 @Composable
 fun OutlineTextField(value : String, onValueChange : (String) -> Unit, label: String){
     OutlinedTextField(
@@ -23,6 +24,7 @@ fun OutlineTextField(value : String, onValueChange : (String) -> Unit, label: St
     )
 }
 
+// Función composable que representa una entrada de valores númericos
 @Composable
 fun OutlineNumberField(value : String, onValueChange : (String) -> Unit, label: String, modifier: Modifier){
     OutlinedTextField(

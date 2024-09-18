@@ -20,16 +20,19 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel : BisectionViewModel by viewModels()
+        val viewModel : BisectionViewModel by viewModels() // Se declara un ViewModel de tipo BisectionViewModel
         enableEdgeToEdge()
         setContent {
             MétodoBisecciónTheme {
                 Scaffold(
+                    // Definición de la barra superior (TopBar)
                     topBar = { TopAppBar(
                         title = { BoldText(label = "Bisection method", size = 30.sp) },
                     )},
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
+                    // Llamada a la función ContentHomeView, que renderiza la vista principal
+                    // Se le pasa el padding que define el área segura de la pantalla y el ViewModel
                     ContentHomeView(paddingValues = innerPadding, viewModel)
                 }
             }
