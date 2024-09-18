@@ -65,13 +65,13 @@ class BisectionViewModel : ViewModel() {
     }
 
 
-    private fun performCalculation(function: String, x0: Double, x1: Double, tolerance: Double, type_tolerance: Int, precicion: Int){
+    private fun performCalculation(function: String, _x0: Double, _x1: Double, tolerance: Double, type_tolerance: Int, precicion: Int){
         try {
             // Crear una instancia de la clase para EvaluarExpresion
             val polinomioEvaluator = PolinomioEvaluator()
 
-            var x0 = x0
-            var x1 = x1
+            var x0 = _x0
+            var x1 = _x1
             var x = (x0 + x1) / 2
             var fx = polinomioEvaluator.evaluarPolinomio(function, x)
 
