@@ -40,7 +40,7 @@ class BisectionViewModel : ViewModel() {
 
         // Validar si el valor de la función esta vacío y que tenga el formato de una función
         if (function.isEmpty()){
-            state = state.copy(showAlert = true, alertMessage = "Function value isn´t empty")
+            state = state.copy(showAlert = true, alertMessage = "Function value is empty")
             return
         }else if(isFunction(function)){
             state = state.copy(showAlert = true, alertMessage = "Invalid function value")
