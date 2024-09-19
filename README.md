@@ -1,6 +1,6 @@
 # Calculadora del Método de Bisección
 
-Esta aplicación móvil fue desarrollada para un proyecto universitario para la meteria "**Programación móvil**". La aplicación implementa el método de bisección, un algoritmo numérico para encontrar raíces de funciones.
+Esta aplicación móvil fue desarrollada para un proyecto universitario para la materia "**Programación móvil**". La aplicación implementa el método de bisección, un algoritmo numérico para encontrar raíces de funciones.
 
 # Uso
 Al iniciar la aplicación, el usuario verá una pantalla donde podrá ingresar los parámetros necesarios para el método de bisección:
