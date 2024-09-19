@@ -19,6 +19,10 @@ La calculadora ejecutará el algoritmo y devolverá la raíz aproximada de la fu
 * **ViewModel**: Para manejar los datos y el estado de la UI.
 
 # Capturas de pantalla
+![Pantalla Principal](./screens/Screenshot_20240919_125145.png)
+![Resultado de Cálculo - 4 decimales](./screens/Screenshot_20240919_125212.png)
+![Resultado de Cálculo - 10 decimales](./screens/Screenshot_20240919_125448.png)
+![Alertas](./screens/Screenshot_20240919_125409.png)
 
 # Licencia
 Este proyecto está licenciado bajo la Licencia MIT.
